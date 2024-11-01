@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +22,8 @@ import com.example.disasterapp.ui.theme.DisasterAppTheme
 
 class MainActivity : ComponentActivity()
 {
+    private val isDropdownExpanded = mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -30,7 +34,7 @@ class MainActivity : ComponentActivity()
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+                    Navigation(isDropdownExpanded)
                 }
             }
         }
@@ -38,15 +42,16 @@ class MainActivity : ComponentActivity()
 }
 
 @Composable
-fun Navigation() {
+fun Navigation(isDropdownExpanded: MutableState<Boolean>) {
     val navController = rememberNavController()
     val viewModel: LocationViewModel = viewModel()
     val context = LocalContext.current
     val locationUtils = LocationUtils(context)
 
-    NavHost(navController, startDestination = Screen.MapScreen.route) {
-        composable(Screen.MapScreen.route) {
+    NavHost(navController, startDestination = Screen.MainScreen.route) {
+        composable(Screen.MainScreen.route) {
             MainScreen(
+                isDropdownExpanded = isDropdownExpanded,
                 locationUtils = locationUtils,
                 viewModel = viewModel,
                 navController = navController,

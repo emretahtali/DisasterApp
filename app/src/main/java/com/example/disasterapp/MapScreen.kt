@@ -11,7 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 
 @Composable
-fun MainScreen(
+fun MapScreen(
     locationUtils: LocationUtils,
     viewModel: LocationViewModel,
     navController: NavController,

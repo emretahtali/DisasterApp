@@ -36,5 +36,5 @@ class LocationViewModel: ViewModel() {
 }
 
 sealed class Screen(val route : String) {
-    data object MapScreen:Screen("mapScreen")
+    data object MainScreen:Screen("mainScreen")
 }
