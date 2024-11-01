@@ -1,0 +1,56 @@
+package com.example.disasterapp
+
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
+class MainActivity : ComponentActivity() {
+
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Firebase Auth ve Firestore'u başlatın
+        auth = Firebase.auth
+        db = Firebase.firestore
+
+        // Anonim giriş yapın ve ardından uploadHelper işlevini çağırın
+        auth.signInAnonymously().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Giriş başarılı, veri ekleme işlemini başlat
+                uploadHelper()
+            } else {
+                // Giriş başarısız oldu
+                Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun uploadHelper() {
+        val newHelper = Helper(
+            name = "Anonim Kullanıcı",
+            contactInfo = "123456789",
+            helpType = "Yemek",
+            availability = true,
+            address = "Ahmet Haşim Sokak No:15, Kadıköy, Istanbul",
+            addressDescription = "3. kat, sağdaki daire",
+            currentCount = 0,
+            maxCapacity = 10
+        )
+
+        db.collection("helpers").add(newHelper)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Helper başarıyla eklendi!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Hata oluştu: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
+    }
+}
