@@ -41,10 +41,8 @@ class MainActivity : ComponentActivity()
         // Anonim giriş yapın ve ardından uploadHelper işlevini çağırın
         auth.signInAnonymously().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Giriş başarılı, veri ekleme işlemini başlat
-                uploadHelper()
+                //uploadHelper()
             } else {
-                // Giriş başarısız oldu
                 Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
             }
         }
