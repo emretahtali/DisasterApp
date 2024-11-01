@@ -14,6 +14,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.compose.ui.graphics.Color
+
 
 @Composable
 fun MainScreen(
@@ -26,10 +28,12 @@ fun MainScreen(
     location: LocationData?
 ){
     Scaffold(
+
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { isDropdownExpanded.value = !isDropdownExpanded.value },
                 shape = CircleShape,
+                containerColor = Color(0xFFB33F00),
                 modifier = Modifier
                     .padding(8.dp)
                     .size(80.dp)
