@@ -9,7 +9,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
+import androidx.navigation.compose.rememberNavController
 import com.example.disasterapp.ui.theme.DisasterAppTheme
 
 class MainActivity : ComponentActivity()
@@ -24,7 +30,7 @@ class MainActivity : ComponentActivity()
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Navigation()
                 }
             }
         }
@@ -32,19 +38,22 @@ class MainActivity : ComponentActivity()
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier)
-{
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun Navigation() {
+    val navController = rememberNavController()
+    val viewModel: LocationViewModel = viewModel()
+    val context = LocalContext.current
+    val locationUtils = LocationUtils(context)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview()
-{
-    DisasterAppTheme {
-        Greeting("Android")
+    NavHost(navController, startDestination = Screen.MapScreen.route) {
+        composable(Screen.MapScreen.route) {
+            MainScreen(
+                locationUtils = locationUtils,
+                viewModel = viewModel,
+                navController = navController,
+                context = context,
+                address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
+                location = viewModel.location.value
+            )
+        }
     }
 }
