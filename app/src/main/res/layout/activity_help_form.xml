@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="İsim"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/contactInfoEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="İletişim Bilgisi"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/helpTypeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Yardım Türü (örneğin: Yemek, Barınma)"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/addressEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Adres"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/addressDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Adres Açıklaması"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/maxCapacityEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Kapasite (Maksimum kişi sayısı)"
+            android:inputType="number"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Yardımı Kaydet" />
+    </LinearLayout>
+</ScrollView>
