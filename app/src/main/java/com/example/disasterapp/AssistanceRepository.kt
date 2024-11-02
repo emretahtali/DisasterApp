@@ -1,35 +1,52 @@
 package com.example.disasterapp
 
-import com.google.firebase.Firebase
+import com.google.firebase.firestore.GeoPoint
+
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 
 class AssistanceRepository {
-    val db = Firebase.firestore
+    val db = FirebaseFirestore.getInstance()
 
-    private val helpersCollection = db.collection("helpers")
-
-    fun addHelper(helper: Helper, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        helpersCollection.add(helper)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { e -> onFailure(e) }
-    }
-
-    fun getAllHelpers(onSuccess: (List<Helper>) -> Unit, onFailure: (Exception) -> Unit) {
-        helpersCollection.get()
-            .addOnSuccessListener { documents ->
-                val helpers = documents.mapNotNull { it.toObject(Helper::class.java) }
+    fun fetchHelpers(onSuccess: (List<Helper>) -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("helpers")
+            .get()
+            .addOnSuccessListener { result ->
+                val helpers = result.mapNotNull { it.toObject(Helper::class.java) }
                 onSuccess(helpers)
             }
-            .addOnFailureListener { e -> onFailure(e) }
-    }
-
-    fun getHelpersByType(helpType: String, onSuccess: (List<Helper>) -> Unit, onFailure: (Exception) -> Unit) {
-        helpersCollection.whereEqualTo("helpType", helpType).get()
-            .addOnSuccessListener { documents ->
-                val helpers = documents.mapNotNull { it.toObject(Helper::class.java) }
-                onSuccess(helpers)
+            .addOnFailureListener { exception ->
+                onFailure(exception)
             }
-            .addOnFailureListener { e -> onFailure(e) }
     }
+    /*
+    // Firestore'dan verileri çek ve haritada göster
+    repository.fetchHelpers(
+    onSuccess = { helpers ->
+        // Her helper konumu için bir marker (işaretçi) ekler
+        for (helper in helpers) {
+            val geoPoint = helper.location
+            if (geoPoint != null) {
+                val latLng = LatLng(geoPoint.latitude, geoPoint.longitude)
+                map.addMarker(
+                    MarkerOptions()
+                        .position(latLng)
+                        .title(helper.helpType) // İşaretçi başlığı
+                        .snippet("${helper.name}, ${helper.contactInfo}") // İşaretçi alt açıklaması
+                )
+            }
+        }
+
+        // İlk konuma yakınlaştırma yap
+        helpers.firstOrNull()?.location?.let { firstGeoPoint ->
+            val firstLatLng = LatLng(firstGeoPoint.latitude, firstGeoPoint.longitude)
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLatLng, 10f))
+        }
+    },
+    onFailure = { exception ->
+        // Hata oluştuğunda Toast mesajı göster
+        Toast.makeText(this, "Veriler alınamadı: ${exception.localizedMessage}", Toast.LENGTH_LONG).show()
+    }
+    )
+    */
+
 }

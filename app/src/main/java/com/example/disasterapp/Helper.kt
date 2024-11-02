@@ -1,12 +1,15 @@
 package com.example.disasterapp
 
+import com.google.firebase.firestore.GeoPoint
+
 data class Helper(
-    val name: String = "",
-    val contactInfo: String = "",
-    val helpType: String = "",
-    val availability: Boolean = true,
-    val address: String = "",
-    val addressDescription: String = "",
-    val currentCount: Int = 0,
-    val maxCapacity: Int = 0
+    val name: String? = null,
+    val contactInfo: String? = null,
+    val helpType: String? = null,
+    val availability: Boolean? = null,
+    val address: String? = null,
+    val addressDescription: String? = null,
+    val currentCount: Int? = null,
+    val maxCapacity: Int? = null,
+    val location: GeoPoint? = null
 )

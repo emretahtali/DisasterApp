@@ -1,6 +1,7 @@
 package com.example.disasterapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity()
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class MainActivity : ComponentActivity()
         auth = Firebase.auth
         db = Firebase.firestore
 
+        /*
         // Anonim giriş yapın ve ardından uploadHelper işlevini çağırın
         auth.signInAnonymously().addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -45,7 +48,17 @@ class MainActivity : ComponentActivity()
             } else {
                 Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
             }
+        }*/
+        auth.signInAnonymously().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                fetchHelpers() // Veriyi çekmek için fetchHelpers fonksiyonunu çağırıyoruz
+            } else {
+                Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
         }
+
+
+
 
         setContent {
             DisasterAppTheme {
@@ -59,6 +72,38 @@ class MainActivity : ComponentActivity()
             }
         }
     }
+    private fun fetchHelpers() {
+        db.collection("helpers")
+            .get()
+            .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    Log.d("MainActivity", "No helpers found")
+                    return@addOnSuccessListener
+                }
+
+                val helpers = result.mapNotNull { document ->
+                    try {
+                        document.toObject(Helper::class.java)
+                    } catch (e: Exception) {
+                        Log.e("MainActivity", "Error parsing helper: ${e.localizedMessage}")
+                        null
+                    }
+                }
+
+                // Başarıyla çekilen verileri işleyin
+                helpers.forEach { helper ->
+                    Log.d("MainActivity", "Helper: $helper")
+                }
+
+                Toast.makeText(this, "Veriler başarıyla çekildi", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Veri çekme hatası: ${exception.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+
+
 
     private fun uploadHelper() {
         val newHelper = Helper(
