@@ -63,7 +63,7 @@ fun DetailScreen(navController: NavController,helper: Helper) {
             modifier = Modifier.padding(vertical = 8.dp)
         )
         Text(
-            text = "Mevcut Kapasite: ${helper.currentCount ?: 0}/${helper.maxCapacity ?: "Sınırsız"}",
+            text = "Mevcut Kapasite: ${helper.maxCapacity ?: "Sınırsız"}",
             fontSize = 26.sp,
             modifier = Modifier.padding(vertical = 8.dp)
         )

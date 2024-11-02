@@ -20,6 +20,24 @@ class LocationViewModel: ViewModel() {
     private val _helpers = mutableStateOf<List<Helper>>(emptyList())
     val helpers: State<List<Helper>> get() = _helpers
 
+    fun fetchFilteredHelpers(db: FirebaseFirestore, showYemek: Boolean, showBarinma: Boolean, showInternet: Boolean, onFailure: (Exception) -> Unit) {
+        val helpTypes = mutableListOf<String>()
+        if (showYemek) helpTypes.add("Yemek")
+        if (showBarinma) helpTypes.add("Barınma")
+        if (showInternet) helpTypes.add("İnternet")
+
+        db.collection("helpers")
+            .whereIn("helpType", helpTypes)
+            .get()
+            .addOnSuccessListener { result ->
+                val helpersList = result.mapNotNull { it.toObject(Helper::class.java) }
+                updateHelpers(helpersList)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
     fun updateHelpers(newHelpers: List<Helper>) {
         _helpers.value = newHelpers
     }

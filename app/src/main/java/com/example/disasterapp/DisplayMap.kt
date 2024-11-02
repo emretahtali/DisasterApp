@@ -35,7 +35,8 @@ import android.graphics.Color
 fun DisplayMap(
     location: LocationData,
     userState: String?,
-    viewModel: LocationViewModel
+    viewModel: LocationViewModel,
+    helpers : List<Helper>
 ) {
     val context = LocalContext.current
     val iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.handshake)

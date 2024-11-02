@@ -23,7 +23,11 @@ fun MapScreen(
     location: LocationData?,
     userState: String?,
     db: FirebaseFirestore
-) {
+
+
+)
+
+{
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = {

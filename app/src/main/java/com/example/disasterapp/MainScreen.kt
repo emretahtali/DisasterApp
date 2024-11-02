@@ -11,8 +11,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,16 +45,34 @@ fun MainScreen(
     context: Context,
     address: String,
     location: LocationData?,
+    helpers : List<Helper>,
     db: FirebaseFirestore
 ){
+
+
     var userState by remember { mutableStateOf<String?>(null) }
     val isShadowApplied = remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit){
-        var helpers = viewModel.fetchHelpers(db){exception ->
-            Toast.makeText(context, exception.message, Toast.LENGTH_LONG).show()
-        }
+    var showYemek by remember { mutableStateOf(true) }
+    var showBarinma by remember { mutableStateOf(true) }
+    var showInternet by remember { mutableStateOf(true) }
+
+
+    val helpers by viewModel.helpers
+
+    // Filtre değişikliklerini kontrol etme
+    LaunchedEffect(showYemek, showBarinma, showInternet) {
+        viewModel.fetchFilteredHelpers(
+            db,
+            showYemek,
+            showBarinma,
+            showInternet,
+            onFailure = { exception ->
+                Toast.makeText(context, "Veri alınamadı: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
+        )
     }
+
 
     Scaffold { contentPadding ->
         Box(
@@ -72,12 +92,56 @@ fun MainScreen(
                 db = db
             )
 
-            // Harita üzerinde yarı saydam bir gölge katmanı
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .background(Color.Transparent) // Yarı saydam beyaz arka plan
+                    .align(Alignment.TopCenter),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(
+                        onClick = { showYemek = !showYemek },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (showYemek) Color(0xFF1565C0) else Color(0xFFBB86FC).copy(alpha = 0.5f) // Tıklanınca yarı saydam hale gelir
+                        )
+                    ) {
+                        Text(text = "Yemek")
+                    }
+                }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(
+                        onClick = { showBarinma = !showBarinma },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (showBarinma) Color(0xFF1565C0) else Color(0xFF1E88E5).copy(alpha = 0.5f) // Tıklanınca yarı saydam koyu mavi
+                        )
+                    ) {
+                        Text(text = "Barınma")
+                    }
+                }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(
+                        onClick = { showInternet = !showInternet },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (showInternet) Color(0xFF1565C0) else Color(0xFF42A5F5).copy(alpha = 0.5f) // Tıklanınca yarı saydam koyu mavi
+                        )
+                    ) {
+                        Text(text = "İnternet")
+                    }
+                }
+            }
+
+
+
             if (isShadowApplied.value) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(0x80000000)) // Yarı saydam siyah renk ile gölge efekti
+                        .background(Color(0x80000000))
                         .zIndex(1f)
                 )
             }
@@ -105,10 +169,10 @@ fun MainScreen(
                     shape = CircleShape,
                     containerColor = Color(0xFFB33F00),
                     modifier = Modifier
-                        .align(Alignment.BottomEnd) // Sağ altta konumlandırma
+                        .align(Alignment.BottomEnd)
                         .padding(16.dp)
                         .size(80.dp)
-                        .zIndex(3f) // Gölge altında kalmasını sağlar
+                        .zIndex(3f)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.handshake),
@@ -130,10 +194,10 @@ fun MainScreen(
                     shape = CircleShape,
                     containerColor = Color(0xFF03A64A),
                     modifier = Modifier
-                        .align(Alignment.BottomEnd) // Sağ altta konumlandırma
+                        .align(Alignment.BottomEnd)
                         .padding(16.dp)
                         .size(80.dp)
-                        .zIndex(3f) // Gölge altında kalmasını sağlar
+                        .zIndex(3f)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Done,
