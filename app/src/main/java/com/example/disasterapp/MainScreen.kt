@@ -126,7 +126,7 @@ fun MainScreen(
                         navController.navigate(Screen.SpecScreen.route)
                     },
                     shape = CircleShape,
-                    containerColor = Color(0xFFB33F00),
+                    containerColor = Color(0xFF03A64A),
                     modifier = Modifier
                         .align(Alignment.BottomEnd) // Sağ altta konumlandırma
                         .padding(16.dp)
