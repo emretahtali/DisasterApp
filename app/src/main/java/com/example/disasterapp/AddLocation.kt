@@ -32,7 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: PaddingValues, onHelpTypeSelected: (String) -> Unit) {
+fun AddLocation(
+    isDropdownExpanded: MutableState<Boolean>,
+    contentPadding: PaddingValues,
+    isShadowApplied: MutableState<Boolean>,
+    onHelpTypeSelected: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,6 +56,7 @@ fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: Paddi
                     icon = Icons.Filled.Check,
                     onClick = {
                         isDropdownExpanded.value = false
+                        isShadowApplied.value = false
                         onHelpTypeSelected("Gıda")
                     }
                 )
@@ -61,6 +66,7 @@ fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: Paddi
                     icon = Icons.Filled.Home,
                     onClick = {
                         isDropdownExpanded.value = false
+                        isShadowApplied.value = false
                         onHelpTypeSelected("Isınma")
                     }
                 )
@@ -70,6 +76,7 @@ fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: Paddi
                     icon = Icons.Filled.Settings,
                     onClick = {
                         isDropdownExpanded.value = false
+                        isShadowApplied.value = false
                         onHelpTypeSelected("İnternet")
                     }
                 )

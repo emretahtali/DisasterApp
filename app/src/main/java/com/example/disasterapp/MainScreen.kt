@@ -52,8 +52,17 @@ fun MainScreen(
                 navController = navController,
                 context = context,
                 address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
-                location = viewModel.location.value
+                location = viewModel.location.value,
+                userState = userState
             )
+
+            if (userState != null) {
+                Button(onClick = {
+                    userState = null
+                }) {
+                    Text(text = "Done")
+                }
+            }
 
             // Harita üzerinde yarı saydam bir gölge katmanı
             if (isShadowApplied.value) {
@@ -67,7 +76,14 @@ fun MainScreen(
 
             // AddLocation bileşeni, gölgenin üstünde olacak şekilde zIndex ile yerleştirildi
             Box(modifier = Modifier.zIndex(2f)) {
-                AddLocation(isDropdownExpanded = isDropdownExpanded, contentPadding = contentPadding)
+                AddLocation (
+                    isDropdownExpanded = isDropdownExpanded,
+                    contentPadding = contentPadding,
+                    isShadowApplied,
+                    onHelpTypeSelected = {
+                        selectedHelpType ->
+                    userState = selectedHelpType
+                })
             }
 
             // FloatingActionButton sağ altta konumlandırılıyor
@@ -87,31 +103,5 @@ fun MainScreen(
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add item", tint = Color.White)
             }
         }
-    ) { contentPadding ->
-        MapScreen(
-            locationUtils = locationUtils,
-            viewModel = viewModel,
-            navController = navController,
-            context = context,
-            address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
-            location = viewModel.location.value,
-            userState = userState
-        )
-        
-        if (userState != null) {
-            Button(onClick = {
-                userState = null
-            }) {
-                Text(text = "Done")
-            }
-        }
-
-        AddLocation(
-            isDropdownExpanded = isDropdownExpanded,
-            contentPadding = contentPadding,
-            onHelpTypeSelected = {
-                selectedHelpType ->
-                userState = selectedHelpType
-        })
     }
 }
