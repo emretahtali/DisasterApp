@@ -116,5 +116,9 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>, db: FirebaseFirestore)
         {
             HelpFormScreen(navController = navController, db = db, context = context)
         }
+        composable(Screen.DetailScreen.route)
+        {
+            DetailScreen(navController,helper = Helper())
+        }
     }
 }
