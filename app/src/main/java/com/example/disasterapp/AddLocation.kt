@@ -43,7 +43,7 @@ fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: Paddi
                 modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 112.dp, end = 16.dp) // Adjusted padding to avoid FAB overlap
+                    .padding(bottom = 112.dp, end = 8.dp) // Adjusted padding to avoid FAB overlap
                     .background(Color.Transparent)
             ) {
                 CustomDropdownItem(
@@ -92,7 +92,7 @@ fun CustomDropdownItem(
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .clickable(onClick = onClick)
     ) {
-        Text(
+        Text(color = Color.White,
             text = text,
             fontSize = 20.sp,
             modifier = Modifier

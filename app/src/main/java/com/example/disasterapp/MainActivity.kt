@@ -101,5 +101,9 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>) {
                 location = viewModel.location.value
             )
         }
+        composable(Screen.SpecScreen.route)
+        {
+            HelpFormScreen()
+        }
     }
 }
