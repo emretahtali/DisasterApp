@@ -38,7 +38,7 @@ fun MainScreen(
                     .padding(8.dp)
                     .size(80.dp)
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "add item")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "add item",tint = Color.White)
             }
         }
     ) { contentPadding ->
