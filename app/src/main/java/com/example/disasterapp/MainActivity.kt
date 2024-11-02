@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +21,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -40,22 +40,23 @@ class MainActivity : ComponentActivity()
         auth = Firebase.auth
         db = Firebase.firestore
 
-        /*
+
         // Anonim giriş yapın ve ardından uploadHelper işlevini çağırın
         auth.signInAnonymously().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                //uploadHelper()
+                uploadHelper()
             } else {
                 Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
             }
-        }*/
+        }
+        /*
         auth.signInAnonymously().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 //fetchHelpers() // Veriyi çekmek için fetchHelpers fonksiyonunu çağırıyoruz
             } else {
                 Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
             }
-        }
+        }*/
 
 
 
@@ -106,7 +107,8 @@ class MainActivity : ComponentActivity()
             address = "Ahmet Haşim Sokak No:15, Kadıköy, Istanbul",
             addressDescription = "3. kat, sağdaki daire",
             currentCount = 0,
-            maxCapacity = 10
+            maxCapacity = 10,
+            location = GeoPoint(35.6878, -119.0253) // Burada GeoPoint koordinatları doğru bir şekilde verilmiştir
         )
 
         db.collection("helpers").add(newHelper)
