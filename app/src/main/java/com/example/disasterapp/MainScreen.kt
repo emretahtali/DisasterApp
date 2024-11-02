@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -56,14 +57,6 @@ fun MainScreen(
                 userState = userState
             )
 
-            if (userState != null) {
-                Button(onClick = {
-                    userState = null
-                }) {
-                    Text(text = "Done")
-                }
-            }
-
             // Harita üzerinde yarı saydam bir gölge katmanı
             if (isShadowApplied.value) {
                 Box(
@@ -86,21 +79,50 @@ fun MainScreen(
                 })
             }
 
-            // FloatingActionButton sağ altta konumlandırılıyor
-            FloatingActionButton(
-                onClick = {
-                    isDropdownExpanded.value = !isDropdownExpanded.value
-                    isShadowApplied.value = !isShadowApplied.value
-                },
-                shape = CircleShape,
-                containerColor = Color(0xFFB33F00),
-                modifier = Modifier
-                    .align(Alignment.BottomEnd) // Sağ altta konumlandırma
-                    .padding(16.dp)
-                    .size(80.dp)
-                    .zIndex(3f) // Gölge altında kalmasını sağlar
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "add item", tint = Color.White)
+
+            // Add Button
+            if (userState == null) {
+                FloatingActionButton(
+                    onClick = {
+                        isDropdownExpanded.value = !isDropdownExpanded.value
+                        isShadowApplied.value = !isShadowApplied.value
+                    },
+                    shape = CircleShape,
+                    containerColor = Color(0xFFB33F00),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd) // Sağ altta konumlandırma
+                        .padding(16.dp)
+                        .size(80.dp)
+                        .zIndex(3f) // Gölge altında kalmasını sağlar
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "add item",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            // Confirm Button
+            else {
+                FloatingActionButton(
+                    onClick = {
+                        userState = null
+                    },
+                    shape = CircleShape,
+                    containerColor = Color(0xFFB33F00),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd) // Sağ altta konumlandırma
+                        .padding(16.dp)
+                        .size(80.dp)
+                        .zIndex(3f) // Gölge altında kalmasını sağlar
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = "confirm location",
+                        tint = Color.White
+                    )
+                }
             }
         }
     }
