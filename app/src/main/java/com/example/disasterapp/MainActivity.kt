@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity()
         }*/
         auth.signInAnonymously().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                fetchHelpers() // Veriyi çekmek için fetchHelpers fonksiyonunu çağırıyoruz
+                //fetchHelpers() // Veriyi çekmek için fetchHelpers fonksiyonunu çağırıyoruz
             } else {
                 Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
             }
@@ -76,23 +76,15 @@ class MainActivity : ComponentActivity()
         db.collection("helpers")
             .get()
             .addOnSuccessListener { result ->
-                if (result.isEmpty) {
-                    Log.d("MainActivity", "No helpers found")
-                    return@addOnSuccessListener
-                }
-
                 val helpers = result.mapNotNull { document ->
                     try {
                         document.toObject(Helper::class.java)
+
                     } catch (e: Exception) {
                         Log.e("MainActivity", "Error parsing helper: ${e.localizedMessage}")
                         null
                     }
-                }
 
-                // Başarıyla çekilen verileri işleyin
-                helpers.forEach { helper ->
-                    Log.d("MainActivity", "Helper: $helper")
                 }
 
                 Toast.makeText(this, "Veriler başarıyla çekildi", Toast.LENGTH_SHORT).show()

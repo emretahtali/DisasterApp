@@ -2,9 +2,11 @@ package com.example.disasterapp
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class LocationViewModel: ViewModel() {
@@ -13,6 +15,34 @@ class LocationViewModel: ViewModel() {
 
     private val _address = mutableStateOf(listOf<GeocodingResult>())
     val address: State<List<GeocodingResult>> = _address
+
+    private val _helpers = mutableStateOf<List<Helper>>(emptyList())
+    val helpers: State<List<Helper>> get() = _helpers
+
+    fun updateHelpers(newHelpers: List<Helper>) {
+        _helpers.value = newHelpers
+    }
+
+    fun getFoodHelpers(): List<Helper> {
+        return helpers.value.filter { it.helpType == "Yemek" }
+    }
+
+    fun getShelterHelpers(): List<Helper> {
+        return helpers.value.filter { it.helpType == "Barınma" }
+    }
+
+
+    fun fetchHelpers(db: FirebaseFirestore, onFailure: (Exception) -> Unit) {
+        db.collection("helpers")
+            .get()
+            .addOnSuccessListener { result ->
+                val helpersList = result.mapNotNull { it.toObject(Helper::class.java) }
+                updateHelpers(helpersList)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
 
     fun updateLocation(newLocation: LocationData) {
         _location.value = newLocation

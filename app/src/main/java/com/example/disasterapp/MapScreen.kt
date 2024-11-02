@@ -70,5 +70,22 @@ fun MapScreen(
     }
 
     locationUtils.requestLocationUpdates(viewModel)
+
+    val foodHelpers = viewModel.getFoodHelpers()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            properties = MapProperties(isMyLocationEnabled = true),
+            onMapLoaded = {
+                foodHelpers.forEach { helper ->
+                    // Her bir yemek yardımı sağlayan yer için haritaya bir işaretçi (marker) ekleyin
+                    val position = LatLng(helper.location.latitude, helper.location.longitude)
+                    GoogleMapMarker(position, title = helper.name)
+                }
+            }
+        )
+    }
+
     viewModel.location.value?.let { DisplayMap(it, userState) }
 }
