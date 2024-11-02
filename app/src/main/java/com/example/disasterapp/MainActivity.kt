@@ -148,7 +148,7 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>) {
         }
         composable(Screen.SpecScreen.route)
         {
-            HelpFormScreen()
+            HelpFormScreen(navController = navController,)
         }
     }
 }
