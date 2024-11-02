@@ -99,7 +99,7 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>, db: FirebaseFirestore)
     val context = LocalContext.current
     val locationUtils = LocationUtils(context)
 
-    NavHost(navController, startDestination = Screen.DetailScreen.route) {
+    NavHost(navController, startDestination = Screen.MainScreen.route) {
         composable(Screen.MainScreen.route) {
             MainScreen(
                 isDropdownExpanded = isDropdownExpanded,
