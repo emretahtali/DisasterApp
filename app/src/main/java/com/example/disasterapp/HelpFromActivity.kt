@@ -47,7 +47,7 @@ class HelpFormActivity : AppCompatActivity() {
         contactInfo: String,
         helpType: String,
         address: String,
-        addressDescription: String,
+        description: String,
         maxCapacity: Int,
         location: GeoPoint? = null
     ) {
@@ -57,7 +57,7 @@ class HelpFormActivity : AppCompatActivity() {
             helpType = helpType,
             availability = true,
             address = address,
-            addressDescription = addressDescription,
+            description = description,
             currentCount = 0,
             maxCapacity = maxCapacity,
             location = location

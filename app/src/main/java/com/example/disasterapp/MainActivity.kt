@@ -102,10 +102,10 @@ class MainActivity : ComponentActivity()
         val newHelper = Helper(
             name = "Anonim Kullanıcı",
             contactInfo = "123456789",
-            helpType = "Yemek",
+            helpType = "Barınak",
             availability = true,
+            description = "Bu bir test yardımıdır",
             address = "Ahmet Haşim Sokak No:15, Kadıköy, Istanbul",
-            addressDescription = "3. kat, sağdaki daire",
             currentCount = 0,
             maxCapacity = 10,
             location = GeoPoint(35.6878, -119.0253) // Burada GeoPoint koordinatları doğru bir şekilde verilmiştir
@@ -146,7 +146,7 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>) {
         }
         composable(Screen.DetailScreen.route)
         {
-            DetailScreen()
+            DetailScreen(navController,helper = Helper())
         }
     }
 }

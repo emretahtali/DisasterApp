@@ -8,7 +8,7 @@ data class Helper(
     val helpType: String? = null,
     val availability: Boolean? = null,
     val address: String? = null,
-    val addressDescription: String? = null,
+    val description: String? = null,
     val currentCount: Int? = null,
     val maxCapacity: Int? = null,
     val location: GeoPoint? = null
