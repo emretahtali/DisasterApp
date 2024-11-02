@@ -2,6 +2,7 @@ package com.example.disasterapp
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun MainScreen(
@@ -40,6 +44,14 @@ fun MainScreen(
 ){
     var userState by remember { mutableStateOf<String?>(null) }
     val isShadowApplied = remember { mutableStateOf(false) }
+
+    val db = Firebase.firestore
+
+    LaunchedEffect(Unit){
+        viewModel.fetchHelpers(db){exception ->
+            Toast.makeText(context, exception.message, Toast.LENGTH_LONG).show()
+        }
+    }
 
     Scaffold { contentPadding ->
         Box(
@@ -55,7 +67,8 @@ fun MainScreen(
                 context = context,
                 address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
                 location = viewModel.location.value,
-                userState = userState
+                userState = userState,
+                db = db
             )
 
             // Harita üzerinde yarı saydam bir gölge katmanı
