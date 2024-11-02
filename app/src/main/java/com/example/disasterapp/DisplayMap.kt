@@ -38,9 +38,9 @@ fun DisplayMap(
     viewModel: LocationViewModel
 ) {
     val context = LocalContext.current
-    var iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.restaurant)
-    if (userState == "Barınma") iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.shelter)
-    else if (userState == "İnternet") iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.internet)
+    var iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.restaurantpin)
+    if (userState == "Barınma") iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.shelterpin)
+    else if (userState == "İnternet") iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.internetpin)
 
     val smallMarkerIcon = Bitmap.createScaledBitmap(iconBitmap, 100, 100, false) // İkonun boyutlarını ayarlayın
 
