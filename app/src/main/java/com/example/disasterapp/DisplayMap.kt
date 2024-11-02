@@ -28,14 +28,15 @@ import androidx.compose.ui.platform.LocalContext
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Color
-
+import androidx.navigation.NavController
 
 
 @Composable
 fun DisplayMap(
     location: LocationData,
     userState: String?,
-    viewModel: LocationViewModel
+    viewModel: LocationViewModel,
+    navController: NavController
 ) {
     val context = LocalContext.current
     var iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.restaurantpin)
@@ -73,10 +74,29 @@ fun DisplayMap(
             else {
                 val helpers = viewModel.getHelpers()
                 helpers.forEach { helper ->
-                    // Her bir yemek yardımı sağlayan yer için haritaya bir işaretçi (marker) eklendi
+                    var iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.restaurantpin)
+                    if (helper.helpType == "Barınma") iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.shelterpin)
+                    else if (helper.helpType == "İnternet") iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.internetpin)
+
+                    val smallMarkerIcon = Bitmap.createScaledBitmap(iconBitmap, 100, 100, false) // İkonun boyutlarını ayarlayın
+
                     val position =
                         helper.location?.let { LatLng(it.latitude, helper.location.longitude) }
-                    position?.let { MarkerState(it) }?.let { Marker(state = it) }
+                    position?.let { MarkerState(it) }?.let { Marker (
+                        state = it,
+                        icon = BitmapDescriptorFactory.fromBitmap(smallMarkerIcon),
+                        onClick = {
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperName", helper.name)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperHelpType", helper.helpType)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperDescription", helper.description)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperContactInfo", helper.contactInfo)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperAvailability", helper.availability)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperAddress", helper.address)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("helperMaxCapacity", helper.maxCapacity)
+                            navController.navigate(Screen.DetailScreen.route)
+                            true
+                        }
+                    ) }
                 }
             }
         }

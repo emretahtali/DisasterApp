@@ -96,5 +96,5 @@ fun MapScreen(
 //        )
 //    }
 
-    viewModel.location.value?.let { DisplayMap(it, userState, viewModel) }
+    viewModel.location.value?.let { DisplayMap(it, userState, viewModel, navController) }
 }

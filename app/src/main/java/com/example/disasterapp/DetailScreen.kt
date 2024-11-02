@@ -24,7 +24,7 @@ fun DetailScreen(navController: NavController, helper: Helper) {
         Information("Durum", if (helper.availability == true) "Uygun" else "Uygun Değil"),
         Information("Adres", helper.address ?: "Adres bilgisi yok"),
         Information("İletişim", helper.contactInfo ?: "Bilgi yok"),
-        Information("Mevcut Kapasite", "${helper.currentCount ?: 0}/${helper.maxCapacity ?: "Sınırsız"}")
+        Information("Mevcut Kapasite", "${helper.maxCapacity ?: "Sınırsız"}")
     )
 
     Box(
@@ -58,7 +58,7 @@ fun DetailScreen(navController: NavController, helper: Helper) {
         }
 
         Button(
-            onClick = { navController.navigate(Screen.MainScreen.route) },
+            onClick = { navController.navigateUp() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 12.dp)

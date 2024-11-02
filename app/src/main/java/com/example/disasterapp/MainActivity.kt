@@ -99,7 +99,7 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>, db: FirebaseFirestore)
     val context = LocalContext.current
     val locationUtils = LocationUtils(context)
 
-    NavHost(navController, startDestination = Screen.DetailScreen.route) {
+    NavHost(navController, startDestination = Screen.MainScreen.route) {
         composable(Screen.MainScreen.route) {
             MainScreen(
                 isDropdownExpanded = isDropdownExpanded,
@@ -118,7 +118,16 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>, db: FirebaseFirestore)
         }
         composable(Screen.DetailScreen.route)
         {
-            DetailScreen(navController,helper = Helper())
+            val helperName = navController.previousBackStackEntry?.savedStateHandle?.get<String>("helperName") ?: ""
+            val helperHelpType = navController.previousBackStackEntry?.savedStateHandle?.get<String>("helperHelpType") ?: ""
+            val helperDescription = navController.previousBackStackEntry?.savedStateHandle?.get<String>("helperDescription") ?: ""
+            val helperContactInfo = navController.previousBackStackEntry?.savedStateHandle?.get<String>("helperContactInfo") ?: ""
+            val helperAvailability = navController.previousBackStackEntry?.savedStateHandle?.get<Boolean>("helperAvailability") ?: false
+            val helperAddress = navController.previousBackStackEntry?.savedStateHandle?.get<String>("helperAddress") ?: ""
+            val helperMaxCapacity = navController.previousBackStackEntry?.savedStateHandle?.get<Int>("helperMaxCapacity") ?: 0
+            val helper = Helper(helperName, helperHelpType, helperDescription, helperContactInfo, helperAvailability, helperAddress, helperMaxCapacity)
+
+            DetailScreen(navController, helper = helper)
         }
     }
 }
