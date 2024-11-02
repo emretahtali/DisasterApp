@@ -80,7 +80,7 @@ fun HelpFormScreen( navController: NavController ) {
         FormField(
             value = address.value,
             onValueChange = { address.value = it },
-            label = "Adres",
+            label = "Adres Açıklaması",
             minHeight = 48.dp
         )
 
