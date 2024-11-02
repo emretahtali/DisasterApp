@@ -109,8 +109,8 @@ fun MainScreen(
                 }
             }
 
-            // Confirm Button
             else {
+                // Confirm Button
                 FloatingActionButton(
                     onClick = {
                         userState = null
@@ -133,6 +133,7 @@ fun MainScreen(
                     )
                 }
 
+                // Cancel Button
                 FloatingActionButton(
                     onClick = {
                         userState = null
@@ -147,7 +148,7 @@ fun MainScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "confirm location",
+                        contentDescription = "cancel",
                         tint = Color.White
                     )
                 }

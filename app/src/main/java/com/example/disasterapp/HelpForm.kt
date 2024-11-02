@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 // Define custom colors
 val BackgroundColor = Color(0xFFF2E3D5)
@@ -31,7 +32,7 @@ val CancelButtonColor = Color(0xFFA62B1F)
 val SaveButtonColor = Color(0xFF2E5902)
 
 @Composable
-fun HelpFormScreen() {
+fun HelpFormScreen( navController: NavController ) {
     val scrollState = rememberScrollState()
 
     val name = remember { mutableStateOf(TextFieldValue("")) }
@@ -103,7 +104,7 @@ fun HelpFormScreen() {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
-                onClick = { /* Handle cancel action */ },
+                onClick = { navController.navigate(Screen.MainScreen.route) },
                 colors = ButtonDefaults.buttonColors(containerColor = CancelButtonColor),
                 modifier = Modifier
                     .weight(1f)
