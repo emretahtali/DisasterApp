@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
@@ -78,7 +79,7 @@ fun MapScreen(
         onFailure = {
             Toast.makeText(context, "Konumlara ulaşılamadı", Toast.LENGTH_SHORT).show()
         }
-    );
+    )
 
 //    Box(modifier = Modifier.fillMaxSize()) {
 //        GoogleMap(

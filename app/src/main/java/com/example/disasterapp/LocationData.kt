@@ -1,8 +1,8 @@
 package com.example.disasterapp
 
 data class LocationData(
-    val latitude: Double,
-    val longitude: Double
+    var latitude: Double,
+    var longitude: Double
 )
 
 data class GeocodingResponse(

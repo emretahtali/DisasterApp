@@ -54,23 +54,23 @@ fun AddLocation(
                     .background(Color.Transparent)
             ) {
                 CustomDropdownItem(
-                    text = "Gıda",
+                    text = "Yemek",
                     buttonColor = Color(0xFF00B3AD),
                     iconResId = R.drawable.restaurant,
                     onClick = {
                         isDropdownExpanded.value = false
                         isShadowApplied.value = false
-                        onHelpTypeSelected("Gıda")
+                        onHelpTypeSelected("Yemek")
                     }
                 )
                 CustomDropdownItem(
-                    text = "Isınma",
+                    text = "Barınma",
                     buttonColor = Color(0xFF006663),
                     iconResId = R.drawable.shelter,
                     onClick = {
                         isDropdownExpanded.value = false
                         isShadowApplied.value = false
-                        onHelpTypeSelected("Isınma")
+                        onHelpTypeSelected("Barınma")
                     }
                 )
                 CustomDropdownItem(

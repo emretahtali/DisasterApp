@@ -1,6 +1,7 @@
 package com.example.disasterapp
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +22,10 @@ class LocationViewModel: ViewModel() {
 
     fun updateHelpers(newHelpers: List<Helper>) {
         _helpers.value = newHelpers
+    }
+
+    fun getHelpers(): List<Helper> {
+        return helpers.value
     }
 
     fun getFoodHelpers(): List<Helper> {

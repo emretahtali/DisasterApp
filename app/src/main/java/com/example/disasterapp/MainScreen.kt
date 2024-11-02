@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.firestore
 
 @Composable
@@ -40,15 +42,14 @@ fun MainScreen(
     navController: NavController,
     context: Context,
     address: String,
-    location: LocationData?
+    location: LocationData?,
+    db: FirebaseFirestore
 ){
     var userState by remember { mutableStateOf<String?>(null) }
     val isShadowApplied = remember { mutableStateOf(false) }
 
-    val db = Firebase.firestore
-
     LaunchedEffect(Unit){
-        viewModel.fetchHelpers(db){exception ->
+        var helpers = viewModel.fetchHelpers(db){exception ->
             Toast.makeText(context, exception.message, Toast.LENGTH_LONG).show()
         }
     }
@@ -90,6 +91,7 @@ fun MainScreen(
                     onHelpTypeSelected = {
                         selectedHelpType ->
                     userState = selectedHelpType
+                    navController.currentBackStackEntry?.savedStateHandle?.set("helpType", selectedHelpType)
                 })
             }
 
@@ -144,6 +146,7 @@ fun MainScreen(
                 FloatingActionButton(
                     onClick = {
                         userState = null
+                        navController.currentBackStackEntry?.savedStateHandle?.set("helpType", null)
                     },
                     shape = CircleShape,
                     containerColor = Color(0xFFB33F00),

@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.disasterapp.ui.theme.DisasterAppTheme
 import android.widget.Toast
+import androidx.compose.material3.Text
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -43,9 +44,7 @@ class MainActivity : ComponentActivity()
 
         // Anonim giriş yapın ve ardından uploadHelper işlevini çağırın
         auth.signInAnonymously().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                uploadHelper()
-            } else {
+            if (!task.isSuccessful) {
                 Toast.makeText(this, "Giriş başarısız oldu: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
             }
         }
@@ -58,9 +57,6 @@ class MainActivity : ComponentActivity()
             }
         }*/
 
-
-
-
         setContent {
             DisasterAppTheme {
                 // A surface container using the 'background' color from the theme
@@ -68,7 +64,7 @@ class MainActivity : ComponentActivity()
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(isDropdownExpanded)
+                    Navigation(isDropdownExpanded, db)
                 }
             }
         }
@@ -94,35 +90,10 @@ class MainActivity : ComponentActivity()
                 Toast.makeText(this, "Veri çekme hatası: ${exception.localizedMessage}", Toast.LENGTH_LONG).show()
             }
     }
-
-
-
-
-    private fun uploadHelper() {
-        val newHelper = Helper(
-            name = "Anonim Kullanıcı",
-            contactInfo = "123456789",
-            helpType = "Yemek",
-            availability = true,
-            address = "Ahmet Haşim Sokak No:15, Kadıköy, Istanbul",
-            addressDescription = "3. kat, sağdaki daire",
-            currentCount = 0,
-            maxCapacity = 10,
-            location = GeoPoint(35.6878, -119.0253) // Burada GeoPoint koordinatları doğru bir şekilde verilmiştir
-        )
-
-        db.collection("helpers").add(newHelper)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Helper başarıyla eklendi!", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Hata oluştu: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-            }
-    }
 }
 
 @Composable
-fun Navigation(isDropdownExpanded: MutableState<Boolean>) {
+fun Navigation(isDropdownExpanded: MutableState<Boolean>, db: FirebaseFirestore) {
     val navController = rememberNavController()
     val viewModel: LocationViewModel = viewModel()
     val context = LocalContext.current
@@ -137,12 +108,13 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>) {
                 navController = navController,
                 context = context,
                 address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
-                location = viewModel.location.value
+                location = viewModel.location.value,
+                db = db
             )
         }
         composable(Screen.SpecScreen.route)
         {
-            HelpFormScreen(navController = navController,)
+            HelpFormScreen(navController = navController, db = db, context = context)
         }
     }
 }

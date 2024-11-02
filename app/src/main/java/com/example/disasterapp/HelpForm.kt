@@ -1,5 +1,7 @@
 package com.example.disasterapp
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 
 // Define custom colors
 val BackgroundColor = Color(0xFFF2E3D5)
@@ -32,10 +36,15 @@ val CancelButtonColor = Color(0xFFA62B1F)
 val SaveButtonColor = Color(0xFF2E5902)
 
 @Composable
-fun HelpFormScreen( navController: NavController ) {
+fun HelpFormScreen (
+    navController: NavController,
+    db: FirebaseFirestore,
+    context: Context
+) {
     val scrollState = rememberScrollState()
 
     val name = remember { mutableStateOf(TextFieldValue("")) }
+    val desc = remember { mutableStateOf(TextFieldValue("")) }
     val contactInfo = remember { mutableStateOf(TextFieldValue("")) }
     val address = remember { mutableStateOf(TextFieldValue("")) }
     val maxCapacity = remember { mutableStateOf(TextFieldValue("")) }
@@ -62,7 +71,16 @@ fun HelpFormScreen( navController: NavController ) {
         FormField(
             value = name.value,
             onValueChange = { name.value = it },
-            label = "İsim",
+            label = "İsim Soyisim",
+            minHeight = 48.dp
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        FormField(
+            value = desc.value,
+            onValueChange = { desc.value = it },
+            label = "Açıklama",
             minHeight = 48.dp
         )
 
@@ -104,7 +122,8 @@ fun HelpFormScreen( navController: NavController ) {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
-                onClick = { navController.navigate(Screen.MainScreen.route) },
+                // cancel button
+                onClick = { navController.navigateUp() },
                 colors = ButtonDefaults.buttonColors(containerColor = CancelButtonColor),
                 modifier = Modifier
                     .weight(1f)
@@ -114,7 +133,27 @@ fun HelpFormScreen( navController: NavController ) {
             }
 
             Button(
-                onClick = { /* Handle save action */ },
+                // confirm button
+                onClick = {
+                    val latitude = navController.previousBackStackEntry?.savedStateHandle?.
+                    get<Double>("lat") ?: 0.0
+                    val longitude = navController.previousBackStackEntry?.savedStateHandle?.
+                    get<Double>("lng") ?: 0.0
+
+                    val geoPoint = GeoPoint(latitude, longitude)
+//                    val geoPoint = GeoPoint(37.42199883, -122.084)
+
+                    val helpType = navController.previousBackStackEntry?.savedStateHandle?.
+                    get<String>("helpType") ?: ""
+
+                    if (name.value.text.isNotEmpty() && desc.value.text.isNotEmpty() && contactInfo.value.text.isNotEmpty() && address.value.text.isNotEmpty()) {
+                        saveHelper(db, context, name.value.text, helpType, desc.value.text, contactInfo.value.text, address.value.text, maxCapacity.value.text.toInt(), geoPoint )
+                        navController.navigateUp()
+                    }
+                    else {
+                        Toast.makeText(context, "Lütfen tüm alanları doldurun", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = SaveButtonColor),
                 modifier = Modifier
                     .weight(1f)
@@ -159,4 +198,35 @@ fun FormField(
             }
         )
     }
+}
+
+private fun saveHelper(
+    db: FirebaseFirestore,
+    context: Context,
+    name: String,
+    helpType: String,
+    description: String,
+    contactInfo: String,
+    address: String,
+    maxCapacity: Int,
+    location: GeoPoint? = null
+) {
+    val newHelper = Helper(
+        name = name,
+        helpType = helpType,
+        description = description,
+        contactInfo = contactInfo,
+        availability = true,
+        address = address,
+        maxCapacity = maxCapacity,
+        location = location
+    )
+
+    db.collection("helpers").add(newHelper)
+        .addOnSuccessListener {
+//            Toast.makeText(context, "Yardım kaydedildi!", Toast.LENGTH_SHORT).show()
+        }
+        .addOnFailureListener { e ->
+            Toast.makeText(context, "Hata: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+        }
 }

@@ -37,18 +37,22 @@ fun DisplayMap(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         GoogleMap (
             modifier = Modifier
                 .weight(1f),
             cameraPositionState = cameraPositionState,
             onMapClick = { userLocation = it }
         ) {
-            if (userState != null) Marker(state = MarkerState(userLocation))
+            if (userState != null)
+            {
+                Marker( state = MarkerState(userLocation))
+                location.latitude = userLocation.latitude
+                location.longitude = userLocation.longitude
+            }
 
             else {
-                val foodHelpers = viewModel.getFoodHelpers()
-                foodHelpers.forEach { helper ->
+                val helpers = viewModel.getHelpers()
+                helpers.forEach { helper ->
                     // Her bir yemek yardımı sağlayan yer için haritaya bir işaretçi (marker) eklendi
                     val position =
                         helper.location?.let { LatLng(it.latitude, helper.location.longitude) }
