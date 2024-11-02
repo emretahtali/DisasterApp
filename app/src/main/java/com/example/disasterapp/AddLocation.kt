@@ -32,24 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MainScreen(isDropdownExpanded: MutableState<Boolean>, contentPadding: PaddingValues) {
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { isDropdownExpanded.value = !isDropdownExpanded.value },
-                containerColor = Color.Cyan
-            ) {
-                Icon(imageVector = Icons.Default.Check, contentDescription = "Add")
-            }
-        },
-        content = { paddingValues ->
-            AddLocation(isDropdownExpanded, paddingValues)
-        }
-    )
-}
-
-@Composable
-fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: PaddingValues) {
+fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: PaddingValues, onHelpTypeSelected: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -67,19 +50,28 @@ fun AddLocation(isDropdownExpanded: MutableState<Boolean>, contentPadding: Paddi
                     text = "Gıda",
                     buttonColor = Color(0xFF00B3AD),
                     icon = Icons.Filled.Check,
-                    onClick = { isDropdownExpanded.value = false }
+                    onClick = {
+                        isDropdownExpanded.value = false
+                        onHelpTypeSelected("Gıda")
+                    }
                 )
                 CustomDropdownItem(
                     text = "Isınma",
                     buttonColor = Color(0xFF006663),
                     icon = Icons.Filled.Home,
-                    onClick = { isDropdownExpanded.value = false }
+                    onClick = {
+                        isDropdownExpanded.value = false
+                        onHelpTypeSelected("Isınma")
+                    }
                 )
                 CustomDropdownItem(
                     text = "İnternet",
                     buttonColor = Color(0xFFFF6B1A),
                     icon = Icons.Filled.Settings,
-                    onClick = { isDropdownExpanded.value = false }
+                    onClick = {
+                        isDropdownExpanded.value = false
+                        onHelpTypeSelected("İnternet")
+                    }
                 )
             }
         }

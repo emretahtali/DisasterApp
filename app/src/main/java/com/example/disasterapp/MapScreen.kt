@@ -17,7 +17,8 @@ fun MapScreen(
     navController: NavController,
     context: Context,
     address: String,
-    location: LocationData?
+    location: LocationData?,
+    userState: String?
 ) {
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -69,5 +70,5 @@ fun MapScreen(
     }
 
     locationUtils.requestLocationUpdates(viewModel)
-    viewModel.location.value?.let { DisplayMap(it) }
+    viewModel.location.value?.let { DisplayMap(it, userState) }
 }

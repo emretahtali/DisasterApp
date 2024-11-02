@@ -22,7 +22,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun DisplayMap(
-    location: LocationData
+    location: LocationData,
+    userState: String?
 ) {
     var userLocation by remember { mutableStateOf(LatLng(location.latitude, location.longitude)) }
 
@@ -37,12 +38,11 @@ fun DisplayMap(
 
         GoogleMap (
             modifier = Modifier
-                .weight(1f)
-                .padding(16.dp),
+                .weight(1f),
             cameraPositionState = cameraPositionState,
             onMapClick = { userLocation = it }
         ) {
-            Marker(state = MarkerState(userLocation))
+            if (userState != null) Marker(state = MarkerState(userLocation))
         }
     }
 }
