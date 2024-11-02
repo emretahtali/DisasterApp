@@ -1,5 +1,6 @@
 package com.example.disasterapp
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -36,7 +38,8 @@ fun AddLocation(
     isDropdownExpanded: MutableState<Boolean>,
     contentPadding: PaddingValues,
     isShadowApplied: MutableState<Boolean>,
-    onHelpTypeSelected: (String) -> Unit) {
+    onHelpTypeSelected: (String) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -47,13 +50,13 @@ fun AddLocation(
                 modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 112.dp, end = 8.dp) // Adjusted padding to avoid FAB overlap
+                    .padding(bottom = 112.dp, end = 8.dp)
                     .background(Color.Transparent)
             ) {
                 CustomDropdownItem(
                     text = "Gıda",
                     buttonColor = Color(0xFF00B3AD),
-                    icon = Icons.Filled.Check,
+                    iconResId = R.drawable.restaurant,
                     onClick = {
                         isDropdownExpanded.value = false
                         isShadowApplied.value = false
@@ -63,7 +66,7 @@ fun AddLocation(
                 CustomDropdownItem(
                     text = "Isınma",
                     buttonColor = Color(0xFF006663),
-                    icon = Icons.Filled.Home,
+                    iconResId = R.drawable.shelter,
                     onClick = {
                         isDropdownExpanded.value = false
                         isShadowApplied.value = false
@@ -73,7 +76,7 @@ fun AddLocation(
                 CustomDropdownItem(
                     text = "İnternet",
                     buttonColor = Color(0xFFFF6B1A),
-                    icon = Icons.Filled.Settings,
+                    iconResId = R.drawable.internet,
                     onClick = {
                         isDropdownExpanded.value = false
                         isShadowApplied.value = false
@@ -89,7 +92,7 @@ fun AddLocation(
 fun CustomDropdownItem(
     text: String,
     buttonColor: Color,
-    icon: ImageVector,
+    iconResId: Int,
     onClick: () -> Unit
 ) {
     Row(
@@ -99,25 +102,25 @@ fun CustomDropdownItem(
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .clickable(onClick = onClick)
     ) {
-        Text(color = Color.White,
+        Text(
+            color = Color.White,
             text = text,
             fontSize = 20.sp,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .padding(top = 16.dp) // Increase top padding to move text further down
+                .padding(top = 16.dp)
         )
         Button(
             onClick = onClick,
             shape = CircleShape,
             colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                containerColor = buttonColor // Use the passed button color
+                containerColor = buttonColor
             ),
             modifier = Modifier.size(72.dp)
         ) {
-            Icon(
-                imageVector = icon, // Use the passed icon
+            Image(
+                painter = painterResource(id = iconResId),
                 contentDescription = null,
-                tint = Color.White,
                 modifier = Modifier.size(24.dp)
             )
         }
