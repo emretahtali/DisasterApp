@@ -109,6 +109,7 @@ fun Navigation(isDropdownExpanded: MutableState<Boolean>, db: FirebaseFirestore)
                 context = context,
                 address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
                 location = viewModel.location.value,
+                helpers = viewModel.helpers.value,
                 db = db
             )
         }
