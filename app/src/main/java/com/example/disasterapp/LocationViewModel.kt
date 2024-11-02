@@ -31,6 +31,10 @@ class LocationViewModel: ViewModel() {
         return helpers.value.filter { it.helpType == "Barınma" }
     }
 
+    fun getWifiHelpers(): List<Helper> {
+        return helpers.value.filter { it.helpType == "İnternet" }
+    }
+
 
     fun fetchHelpers(db: FirebaseFirestore, onFailure: (Exception) -> Unit) {
         db.collection("helpers")

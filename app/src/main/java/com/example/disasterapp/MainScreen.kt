@@ -65,7 +65,8 @@ fun MainScreen(
                 context = context,
                 address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
                 location = viewModel.location.value,
-                userState = userState
+                userState = userState,
+                db = db
             )
 
             if (userState != null) {

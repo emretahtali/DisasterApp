@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun MapScreen(
@@ -18,7 +20,8 @@ fun MapScreen(
     context: Context,
     address: String,
     location: LocationData?,
-    userState: String?
+    userState: String?,
+    db: FirebaseFirestore
 ) {
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -70,22 +73,27 @@ fun MapScreen(
     }
 
     locationUtils.requestLocationUpdates(viewModel)
+    viewModel.fetchHelpers(
+        db,
+        onFailure = {
+            Toast.makeText(context, "Konumlara ulaşılamadı", Toast.LENGTH_SHORT).show()
+        }
+    );
 
-    val foodHelpers = viewModel.getFoodHelpers()
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        GoogleMap(
+//            modifier = Modifier.fillMaxSize(),
+//            properties = MapProperties(isMyLocationEnabled = true),
+//            onMapLoaded = {
+//    val foodHelpers = viewModel.getFoodHelpers()
+//                foodHelpers.forEach { helper ->
+//                    // Her bir yemek yardımı sağlayan yer için haritaya bir işaretçi (marker) ekleyin
+//                    val position = LatLng(helper.location.latitude, helper.location.longitude)
+//                    GoogleMapMarker(position, title = helper.name)
+//                }
+//            }
+//        )
+//    }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            properties = MapProperties(isMyLocationEnabled = true),
-            onMapLoaded = {
-                foodHelpers.forEach { helper ->
-                    // Her bir yemek yardımı sağlayan yer için haritaya bir işaretçi (marker) ekleyin
-                    val position = LatLng(helper.location.latitude, helper.location.longitude)
-                    GoogleMapMarker(position, title = helper.name)
-                }
-            }
-        )
-    }
-
-    viewModel.location.value?.let { DisplayMap(it, userState) }
+    viewModel.location.value?.let { DisplayMap(it, userState, viewModel) }
 }
