@@ -20,6 +20,16 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.example.disasterapp.R
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.ui.platform.LocalContext
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Color
+
+
 
 @Composable
 fun DisplayMap(
@@ -27,6 +37,10 @@ fun DisplayMap(
     userState: String?,
     viewModel: LocationViewModel
 ) {
+    val context = LocalContext.current
+    val iconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.handshake)
+    val smallMarkerIcon = Bitmap.createScaledBitmap(iconBitmap, 100, 100, false) // İkonun boyutlarını ayarlayın
+
     var userLocation by remember { mutableStateOf(LatLng(location.latitude, location.longitude)) }
 
     val cameraPositionState = rememberCameraPositionState {
@@ -45,7 +59,10 @@ fun DisplayMap(
         ) {
             if (userState != null)
             {
-                Marker( state = MarkerState(userLocation))
+                Marker(
+                    state = MarkerState(userLocation),
+                    icon = BitmapDescriptorFactory.fromBitmap(smallMarkerIcon)
+                )
                 location.latitude = userLocation.latitude
                 location.longitude = userLocation.longitude
             }

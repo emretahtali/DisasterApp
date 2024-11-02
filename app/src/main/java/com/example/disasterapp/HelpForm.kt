@@ -224,7 +224,7 @@ private fun saveHelper(
 
     db.collection("helpers").add(newHelper)
         .addOnSuccessListener {
-//            Toast.makeText(context, "Yardım kaydedildi!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Yardım kaydedildi!", Toast.LENGTH_SHORT).show()
         }
         .addOnFailureListener { e ->
             Toast.makeText(context, "Hata: ${e.localizedMessage}", Toast.LENGTH_LONG).show()

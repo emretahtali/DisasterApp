@@ -110,18 +110,21 @@ fun CustomDropdownItem(
                 .padding(end = 16.dp)
                 .padding(top = 16.dp)
         )
+
         Button(
             onClick = onClick,
             shape = CircleShape,
             colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                 containerColor = buttonColor
             ),
-            modifier = Modifier.size(72.dp)
+            modifier = Modifier.size(72.dp) // Fixed button size for all items
         ) {
+            // Set icon size conditionally based on the text value
+            val iconSize = if (text == "Isınma") 48.dp else 24.dp
             Image(
                 painter = painterResource(id = iconResId),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(iconSize) // Only increase the image size for "Isınma"
             )
         }
     }
