@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 
 class HelpFormActivity : AppCompatActivity() {
 
@@ -47,7 +48,8 @@ class HelpFormActivity : AppCompatActivity() {
         helpType: String,
         address: String,
         addressDescription: String,
-        maxCapacity: Int
+        maxCapacity: Int,
+        location: GeoPoint? = null
     ) {
         val newHelper = Helper(
             name = name,
@@ -56,8 +58,9 @@ class HelpFormActivity : AppCompatActivity() {
             availability = true,
             address = address,
             addressDescription = addressDescription,
-            currentCount = 0, // Başlangıç değeri 0
-            maxCapacity = maxCapacity
+            currentCount = 0,
+            maxCapacity = maxCapacity,
+            location = location
         )
 
         db.collection("helpers").add(newHelper)

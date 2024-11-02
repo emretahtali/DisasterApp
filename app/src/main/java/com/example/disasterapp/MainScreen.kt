@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -22,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.graphics.Color
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.zIndex
 
@@ -79,7 +78,6 @@ fun MainScreen(
                 })
             }
 
-
             // Add Button
             if (userState == null) {
                 FloatingActionButton(
@@ -103,11 +101,14 @@ fun MainScreen(
                 }
             }
 
-            // Confirm Button
             else {
+                // Confirm Button
                 FloatingActionButton(
                     onClick = {
                         userState = null
+                        navController.currentBackStackEntry?.savedStateHandle?.set("lat", location?.latitude)
+                        navController.currentBackStackEntry?.savedStateHandle?.set("lng", location?.longitude)
+                        navController.navigate(Screen.SpecScreen.route)
                     },
                     shape = CircleShape,
                     containerColor = Color(0xFFB33F00),
@@ -118,8 +119,28 @@ fun MainScreen(
                         .zIndex(3f) // Gölge altında kalmasını sağlar
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowForward,
+                        imageVector = Icons.Default.Done,
                         contentDescription = "confirm location",
+                        tint = Color.White
+                    )
+                }
+
+                // Cancel Button
+                FloatingActionButton(
+                    onClick = {
+                        userState = null
+                    },
+                    shape = CircleShape,
+                    containerColor = Color(0xFFB33F00),
+                    modifier = Modifier
+                        .align(Alignment.BottomStart) // Sağ altta konumlandırma
+                        .padding(16.dp)
+                        .size(80.dp)
+                        .zIndex(3f) // Gölge altında kalmasını sağlar
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "cancel",
                         tint = Color.White
                     )
                 }
