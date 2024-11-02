@@ -72,4 +72,5 @@ class LocationViewModel: ViewModel() {
 sealed class Screen(val route : String) {
     data object MainScreen:Screen("mainScreen")
     data object SpecScreen:Screen("specScreen")
+    data object DetailScreen:Screen("detailScreen")
 }
