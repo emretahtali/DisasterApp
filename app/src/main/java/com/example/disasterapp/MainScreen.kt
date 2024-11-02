@@ -1,8 +1,8 @@
 package com.example.disasterapp
 
 import android.content.Context
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,7 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.graphics.Color
-
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.zIndex
 
 @Composable
 fun MainScreen(
@@ -26,30 +29,56 @@ fun MainScreen(
     context: Context,
     address: String,
     location: LocationData?
-){
-    Scaffold(
+) {
+    val isShadowApplied = remember { mutableStateOf(false) }
 
-        floatingActionButton = {
+    Scaffold { contentPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+        ) {
+            // Harita bileşeni (MapScreen)
+            MapScreen(
+                locationUtils = locationUtils,
+                viewModel = viewModel,
+                navController = navController,
+                context = context,
+                address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
+                location = viewModel.location.value
+            )
+
+            // Harita üzerinde yarı saydam bir gölge katmanı
+            if (isShadowApplied.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0x80000000)) // Yarı saydam siyah renk ile gölge efekti
+                        .zIndex(1f)
+                )
+            }
+
+            // AddLocation bileşeni, gölgenin üstünde olacak şekilde zIndex ile yerleştirildi
+            Box(modifier = Modifier.zIndex(2f)) {
+                AddLocation(isDropdownExpanded = isDropdownExpanded, contentPadding = contentPadding)
+            }
+
+            // FloatingActionButton sağ altta konumlandırılıyor
             FloatingActionButton(
-                onClick = { isDropdownExpanded.value = !isDropdownExpanded.value },
+                onClick = {
+                    isDropdownExpanded.value = !isDropdownExpanded.value
+                    isShadowApplied.value = !isShadowApplied.value
+                },
                 shape = CircleShape,
                 containerColor = Color(0xFFB33F00),
                 modifier = Modifier
-                    .padding(8.dp)
+                    .align(Alignment.BottomEnd) // Sağ altta konumlandırma
+                    .padding(16.dp)
                     .size(80.dp)
+                    .zIndex(3f) // Gölge altında kalmasını sağlar
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "add item",tint = Color.White)
+                Icon(imageVector = Icons.Default.Add, contentDescription = "add item", tint = Color.White)
             }
         }
-    ) { contentPadding ->
-        MapScreen(
-            locationUtils = locationUtils,
-            viewModel = viewModel,
-            navController = navController,
-            context = context,
-            address = viewModel.address.value.firstOrNull()?.formatted_adress ?: "No Address",
-            location = viewModel.location.value
-        )
-        AddLocation(isDropdownExpanded = isDropdownExpanded, contentPadding = contentPadding)
     }
 }
