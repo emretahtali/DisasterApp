@@ -25,3 +25,10 @@ Disaster App is a mobile application developed during **Bilkent Hackathor**, a 2
 - **User Authentication**: Allow users to log in and contribute to help locations.
 - **Offline Support**: Enable offline access to saved help spots.
 - **Messaging Feature**: Direct communication between people needing and providing help.
+
+## Development Team
+[Emre Tahtalı](https://github.com/emretahtali)
+
+[Muhittin Arda Aksakal](https://github.com/muhittinardaaksakal)
+
+[Yiğit Kaya Bağcı](https://github.com/yigitkayabagci)
